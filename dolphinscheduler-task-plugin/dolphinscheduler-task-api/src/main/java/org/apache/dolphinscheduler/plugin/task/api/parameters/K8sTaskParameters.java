@@ -30,6 +30,7 @@ import java.util.List;
 public class K8sTaskParameters extends AbstractParameters {
     private String image;
     private String namespace;
+    private String command;
     private double minCpuCores;
     private double minMemorySpace;
 
@@ -65,6 +66,14 @@ public class K8sTaskParameters extends AbstractParameters {
         this.minMemorySpace = minMemorySpace;
     }
 
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
     @Override
     public boolean checkParameters() {
         return StringUtils.isNotEmpty(image) && StringUtils.isNotEmpty(namespace)
@@ -81,6 +90,7 @@ public class K8sTaskParameters extends AbstractParameters {
         return "K8sTaskParameters{"
             + "image='" + image + '\''
             + ", namespace='" + namespace + '\''
+            + ", command='" + command + '\''
             + ", minCpuCores=" + minCpuCores
             + ", minMemorySpace=" + minMemorySpace
             + '}';

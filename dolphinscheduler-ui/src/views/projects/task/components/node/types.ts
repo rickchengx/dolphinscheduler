@@ -331,6 +331,7 @@ interface ITaskParams {
   minCpuCores?: string
   minMemorySpace?: string
   image?: string
+  command?: string
   algorithm?: string
   params?: string
   searchParams?: string

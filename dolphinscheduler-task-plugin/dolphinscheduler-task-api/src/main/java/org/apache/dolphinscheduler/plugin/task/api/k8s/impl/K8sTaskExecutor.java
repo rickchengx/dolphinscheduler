@@ -18,6 +18,7 @@
 package org.apache.dolphinscheduler.plugin.task.api.k8s.impl;
 
 import static org.apache.dolphinscheduler.plugin.task.api.TaskConstants.API_VERSION;
+import static org.apache.dolphinscheduler.plugin.task.api.TaskConstants.COMMAND_SPLIT_REGEX;
 import static org.apache.dolphinscheduler.plugin.task.api.TaskConstants.CPU;
 import static org.apache.dolphinscheduler.plugin.task.api.TaskConstants.EXIT_CODE_FAILURE;
 import static org.apache.dolphinscheduler.plugin.task.api.TaskConstants.EXIT_CODE_KILL;
@@ -46,12 +47,15 @@ import org.apache.dolphinscheduler.spi.utils.JSONUtils;
 import org.apache.dolphinscheduler.spi.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 
@@ -107,6 +111,15 @@ public class K8sTaskExecutor extends AbstractK8sTaskExecutor {
                 envVars.add(envVar);
             }
         }
+
+        String commandString = k8STaskMainParameters.getCommand().trim();
+        Matcher commandMatcher = Pattern.compile(COMMAND_SPLIT_REGEX).matcher(commandString);
+
+        List<String> commands = new ArrayList<>();
+        while(commandMatcher.find()){
+            commands.add(commandMatcher.group());
+        }
+
         return new JobBuilder()
                 .withApiVersion(API_VERSION)
                 .withNewMetadata()
@@ -121,6 +134,7 @@ public class K8sTaskExecutor extends AbstractK8sTaskExecutor {
                 .addNewContainer()
                 .withName(k8sJobName)
                 .withImage(image)
+                .withCommand(commands.size() == 0 ? null : commands)
                 .withImagePullPolicy(IMAGE_PULL_POLICY)
                 .withResources(new ResourceRequirements(limitRes, reqRes))
                 .withEnv(envVars)

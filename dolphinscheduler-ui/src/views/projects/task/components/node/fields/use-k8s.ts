@@ -59,6 +59,18 @@ export function useK8s(model: { [field: string]: any }): IJsonItem[] {
         message: t('project.node.min_memory_tips')
       }
     },
+    {
+      type: 'input',
+      field: 'command',
+      name: t('project.node.command'),
+      props: {
+        placeholder: t('project.node.command_tips')
+      },
+      validate: {
+        trigger: ['input', 'blur'],
+        message: t('project.node.command_tips')
+      }
+    },
     ...useCustomParams({ model, field: 'localParams', isSimple: true })
   ]
 }

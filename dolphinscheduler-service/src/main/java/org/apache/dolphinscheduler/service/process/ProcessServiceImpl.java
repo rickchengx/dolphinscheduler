@@ -49,6 +49,7 @@ import org.apache.dolphinscheduler.common.utils.CodeGenerateUtils;
 import org.apache.dolphinscheduler.common.utils.CodeGenerateUtils.CodeGenerateException;
 import org.apache.dolphinscheduler.common.utils.DateUtils;
 import org.apache.dolphinscheduler.common.utils.JSONUtils;
+import org.apache.dolphinscheduler.dao.entity.Cluster;
 import org.apache.dolphinscheduler.dao.entity.Command;
 import org.apache.dolphinscheduler.dao.entity.DagData;
 import org.apache.dolphinscheduler.dao.entity.DataSource;
@@ -80,6 +81,7 @@ import org.apache.dolphinscheduler.dao.entity.TaskInstance;
 import org.apache.dolphinscheduler.dao.entity.Tenant;
 import org.apache.dolphinscheduler.dao.entity.UdfFunc;
 import org.apache.dolphinscheduler.dao.entity.User;
+import org.apache.dolphinscheduler.dao.mapper.ClusterMapper;
 import org.apache.dolphinscheduler.dao.mapper.CommandMapper;
 import org.apache.dolphinscheduler.dao.mapper.DataSourceMapper;
 import org.apache.dolphinscheduler.dao.mapper.DqComparisonTypeMapper;
@@ -276,7 +278,7 @@ public class ProcessServiceImpl implements ProcessService {
     private TaskPluginManager taskPluginManager;
 
     @Autowired
-    private K8sMapper k8sMapper;
+    private ClusterMapper clusterMapper;
 
     @Autowired
     private CuringParamsService curingGlobalParamsService;
@@ -3169,10 +3171,10 @@ public class ProcessServiceImpl implements ProcessService {
         if (Strings.isNullOrEmpty(clusterName)) {
             return null;
         }
-        QueryWrapper<K8s> nodeWrapper = new QueryWrapper<>();
-        nodeWrapper.eq("k8s_name", clusterName);
-        K8s k8s = k8sMapper.selectOne(nodeWrapper);
-        return k8s.getK8sConfig();
+        QueryWrapper<Cluster> nodeWrapper = new QueryWrapper<>();
+        nodeWrapper.eq("name", clusterName);
+        Cluster cluster = clusterMapper.selectOne(nodeWrapper);
+        return cluster.getConfig();
     }
 
     @Override

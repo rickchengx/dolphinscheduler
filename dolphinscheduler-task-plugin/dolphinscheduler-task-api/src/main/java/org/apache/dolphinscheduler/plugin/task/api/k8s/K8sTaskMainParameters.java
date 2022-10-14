@@ -25,6 +25,7 @@ import java.util.Map;
 public class K8sTaskMainParameters {
 
     private String image;
+    private String command;
     private String namespaceName;
     private String clusterName;
     private double minCpuCores;
@@ -79,10 +80,19 @@ public class K8sTaskMainParameters {
         this.paramsMap = paramsMap;
     }
 
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
     @Override
     public String toString() {
         return "K8sTaskMainParameters{"
              + "image='" + image + '\''
+             + ", command='" + command + '\''
              + ", namespaceName='" + namespaceName + '\''
              + ", clusterName='" + clusterName + '\''
              + ", minCpuCores=" + minCpuCores
